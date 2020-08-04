@@ -1,0 +1,12 @@
+# DESCRIPTION: Verilator output: Timestamp data for --skip-identical.  Delete at will.
+C "-Wall -cc src/ALU.v -Mdir simulations/ALU"
+S   7586552 17338024  1593525240   649686524  1590335513           0 "/usr/bin/verilator_bin"
+T     10095     9060  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU.cpp"
+T      2485     9059  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU.h"
+T      1417     9062  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU.mk"
+T       529     9057  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU__Syms.cpp"
+T       767     9058  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU__Syms.h"
+T       252     9063  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU__ver.d"
+T         0        0  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU__verFiles.dat"
+T      1524     9061  1596481455   476960851  1596481455   476960851 "simulations/ALU/VALU_classes.mk"
+S      1201     8938  1596481447     6861016  1596481426   539953578 "src/ALU.v"

@@ -1,11 +1,11 @@
 module ALU(
-    input [7:0] a,
-    input [7:0] b,
-    input [3:0] op,
-    output [7:0] out,
-    output vf_wr, // Should the CPU update VF register?
-    output carry_or_borrow, // Shared flag for carry and borrow 
-)
+    input wire [7:0] a,
+    input wire [7:0] b,
+    input wire [3:0] op,
+    output reg [7:0] out,
+    output reg vf_we, // Should the CPU update VF register?
+    output reg carry_or_borrow // Shared flag for carry and borrow 
+);
 
 // Taken from Chip-8 opcodes table for easy decoding
 localparam LD  = 0;
@@ -45,6 +45,6 @@ always @(*) begin
     endcase
 end
 
-assign vf_wr = op > XOR: // every op after XOR modifies VF 
+assign vf_we = op > XOR; // every op after XOR modifies VF 
 
 endmodule
