@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "Running verilator..."
+verilator -Wall -cc src/CPU.v src/ALU.v src/PC.v -Mdir simulations/CPU
+
+cd simulations/CPU/
+echo "Compiling verilator files..."
+make -f VCPU.mk
+
+echo "Compiling our test bench..."
+cd ..
+g++ -I /usr/share/verilator/include/ -I CPU /usr/share/verilator/include/verilated.cpp CPU.cpp utils.c CPU/VCPU__ALL.a -o bin/CPU
+
+echo "Running test bench... Good luck!"
+echo "-------------------------------"
+bin/CPU
