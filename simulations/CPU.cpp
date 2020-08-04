@@ -20,9 +20,9 @@ void test_jmp(VCPU *tb) {
         tb->CPU__DOT__memory[0] = (1 << 4) | (addr >> 8);
         tb->CPU__DOT__memory[1] = addr & 0xFF;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != addr) {
-            printf("FAIL! Jumping to %x set PC to %x\n", addr, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != addr) {
+            printf("FAIL! Jumping to %x set PC to %x\n", addr, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -39,9 +39,9 @@ void test_se(VCPU *tb) {
         tb->CPU__DOT__memory[1] = kk;
         tb->CPU__DOT__vx[vx] = kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 4) {
-            printf("FAIL! SE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 4) {
+            printf("FAIL! SE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -54,9 +54,9 @@ void test_se(VCPU *tb) {
         tb->CPU__DOT__memory[1] = kk;
         tb->CPU__DOT__vx[vx] = !kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 2) {
-            printf("FAIL! SE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 2) {
+            printf("FAIL! SE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -73,9 +73,9 @@ void test_sne(VCPU *tb) {
         tb->CPU__DOT__memory[1] = kk;
         tb->CPU__DOT__vx[vx] = kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 2) {
-            printf("FAIL! SNE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 2) {
+            printf("FAIL! SNE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -88,9 +88,9 @@ void test_sne(VCPU *tb) {
         tb->CPU__DOT__memory[1] = kk;
         tb->CPU__DOT__vx[vx] = !kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 4) {
-            printf("FAIL! SNE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 4) {
+            printf("FAIL! SNE V%X to %x set PC to %x\n", vx, kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -110,9 +110,9 @@ void test_sevxvy(VCPU *tb) {
         tb->CPU__DOT__vx[vx] = kk;
         tb->CPU__DOT__vx[vy] = kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 4) {
-            printf("FAIL! SE V%X to %x and V%X to %x set PC to %x\n", vx, kk, vy, !kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 4) {
+            printf("FAIL! SE V%X to %x and V%X to %x set PC to %x\n", vx, kk, vy, !kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -128,9 +128,9 @@ void test_sevxvy(VCPU *tb) {
         tb->CPU__DOT__vx[vx] = !kk;
         tb->CPU__DOT__vx[vy] = kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
-        if(tb->CPU__DOT__pc != 2) {
-            printf("FAIL! SE V%X to %x and V%X to %x set PC to %x\n", vx, kk, vy, !kk, tb->CPU__DOT__pc);
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
+        if(tb->CPU__DOT__pc_out != 2) {
+            printf("FAIL! SE V%X to %x and V%X to %x set PC to %x\n", vx, kk, vy, !kk, tb->CPU__DOT__pc_out);
             return;
         }
     }
@@ -146,7 +146,7 @@ void test_vxkk(VCPU *tb) {
         tb->CPU__DOT__memory[1] = kk;
         tb->CPU__DOT__vx[vx] = !kk;
         reset(tb);
-        tick(tb); tick(tb); tick(tb); // cycles through state machine
+        tick(tb); tick(tb); tick(tb); tick(tb);// cycles through state machine
         if(tb->CPU__DOT__vx[vx] != kk) {
             printf("FAIL! Setting V%X to %x set to %x instead\n", vx, kk, tb->CPU__DOT__vx[vx]);
             return;
@@ -171,7 +171,7 @@ int main(int argc, char **argv) {
     reset(tb);
     dump_mem(tb);
     for(size_t i = 0; i < N_CYCLES; i++) {
-        printf("Cycle=%u PC=%d IR=%04x\n", i, tb->CPU__DOT__pc, tb->CPU__DOT__ir);
+        printf("Cycle=%u PC=%d IR=%04x\n", i, tb->CPU__DOT__pc_out, tb->CPU__DOT__ir);
         dump_state(tb);
         dump_regs(tb);
         printf("Mem_out %02x\n", tb->CPU__DOT__mem_out);

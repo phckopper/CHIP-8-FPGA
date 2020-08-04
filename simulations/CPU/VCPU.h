@@ -33,12 +33,15 @@ VL_MODULE(VCPU) {
     CData/*7:0*/ CPU__DOT__alu_out;
     CData/*0:0*/ CPU__DOT__alu_carry_or_borrow;
     CData/*0:0*/ CPU__DOT__alu_vf_we;
+    CData/*0:0*/ CPU__DOT__pc_preload_stb;
+    CData/*0:0*/ CPU__DOT__pc_jump_next_stb;
     CData/*7:0*/ CPU__DOT__mem_in;
     CData/*7:0*/ CPU__DOT__mem_out;
     CData/*0:0*/ CPU__DOT__mem_we;
     CData/*3:0*/ CPU__DOT__state;
+    SData/*11:0*/ CPU__DOT__pc_preload;
+    SData/*11:0*/ CPU__DOT__pc_out;
     SData/*15:0*/ CPU__DOT__ir;
-    SData/*11:0*/ CPU__DOT__pc;
     SData/*11:0*/ CPU__DOT__mem_addr;
     CData/*7:0*/ CPU__DOT__vx[16];
     CData/*7:0*/ CPU__DOT__memory[4096];

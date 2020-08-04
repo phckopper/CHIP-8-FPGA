@@ -98,12 +98,12 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
     CData/*3:0*/ __Vdlyvdim0__CPU__DOT__vx__v2;
     CData/*7:0*/ __Vdlyvval__CPU__DOT__vx__v2;
     CData/*0:0*/ __Vdlyvset__CPU__DOT__vx__v2;
-    SData/*11:0*/ __Vdly__CPU__DOT__pc;
     SData/*15:0*/ __Vdly__CPU__DOT__ir;
+    SData/*11:0*/ __Vdly__CPU__DOT__pc_out;
     // Body
-    __Vdly__CPU__DOT__pc = vlTOPp->CPU__DOT__pc;
     __Vdly__CPU__DOT__state = vlTOPp->CPU__DOT__state;
     __Vdly__CPU__DOT__ir = vlTOPp->CPU__DOT__ir;
+    __Vdly__CPU__DOT__pc_out = vlTOPp->CPU__DOT__pc_out;
     __Vdlyvset__CPU__DOT__vx__v0 = 0U;
     __Vdlyvset__CPU__DOT__vx__v1 = 0U;
     __Vdlyvset__CPU__DOT__vx__v2 = 0U;
@@ -111,12 +111,30 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
         vlTOPp->CPU__DOT__mem_in = 0U;
     }
     if (vlTOPp->rst) {
+        __Vdly__CPU__DOT__pc_out = 0U;
+    } else {
+        if (vlTOPp->CPU__DOT__pc_preload_stb) {
+            __Vdly__CPU__DOT__pc_out = vlTOPp->CPU__DOT__pc_preload;
+        } else {
+            if (vlTOPp->CPU__DOT__pc_jump_next_stb) {
+                __Vdly__CPU__DOT__pc_out = (0xfffU 
+                                            & ((IData)(2U) 
+                                               + (IData)(vlTOPp->CPU__DOT__pc_out)));
+            } else {
+                if (((0U == (IData)(vlTOPp->CPU__DOT__state)) 
+                     | (1U == (IData)(vlTOPp->CPU__DOT__state)))) {
+                    __Vdly__CPU__DOT__pc_out = (0xfffU 
+                                                & ((IData)(1U) 
+                                                   + (IData)(vlTOPp->CPU__DOT__pc_out)));
+                }
+            }
+        }
+    }
+    vlTOPp->CPU__DOT__pc_out = __Vdly__CPU__DOT__pc_out;
+    if (vlTOPp->rst) {
         __Vdly__CPU__DOT__state = 0U;
-        __Vdly__CPU__DOT__pc = 0U;
     } else {
         if ((0U == (IData)(vlTOPp->CPU__DOT__state))) {
-            __Vdly__CPU__DOT__pc = (0xfffU & ((IData)(1U) 
-                                              + (IData)(vlTOPp->CPU__DOT__pc)));
             vlTOPp->CPU__DOT__mem_we = 0U;
             __Vdly__CPU__DOT__ir = ((0xffU & (IData)(__Vdly__CPU__DOT__ir)) 
                                     | ((IData)(vlTOPp->CPU__DOT__mem_out) 
@@ -124,8 +142,6 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
             __Vdly__CPU__DOT__state = 1U;
         } else {
             if ((1U == (IData)(vlTOPp->CPU__DOT__state))) {
-                __Vdly__CPU__DOT__pc = (0xfffU & ((IData)(1U) 
-                                                  + (IData)(vlTOPp->CPU__DOT__pc)));
                 vlTOPp->CPU__DOT__mem_we = 0U;
                 __Vdly__CPU__DOT__ir = ((0xff00U & (IData)(__Vdly__CPU__DOT__ir)) 
                                         | (IData)(vlTOPp->CPU__DOT__mem_out));
@@ -181,10 +197,7 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
                                          == vlTOPp->CPU__DOT__vx
                                          [(0xfU & ((IData)(vlTOPp->CPU__DOT__ir) 
                                                    >> 4U))])) {
-                                        __Vdly__CPU__DOT__pc 
-                                            = (0xfffU 
-                                               & ((IData)(2U) 
-                                                  + (IData)(vlTOPp->CPU__DOT__pc)));
+                                        vlTOPp->CPU__DOT__pc_jump_next_stb = 1U;
                                     }
                                 } else {
                                     if ((vlTOPp->CPU__DOT__vx
@@ -192,10 +205,7 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
                                                    >> 8U))] 
                                          != (0xffU 
                                              & (IData)(vlTOPp->CPU__DOT__ir)))) {
-                                        __Vdly__CPU__DOT__pc 
-                                            = (0xfffU 
-                                               & ((IData)(2U) 
-                                                  + (IData)(vlTOPp->CPU__DOT__pc)));
+                                        vlTOPp->CPU__DOT__pc_jump_next_stb = 1U;
                                     }
                                 }
                             }
@@ -207,31 +217,34 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
                                                    >> 8U))] 
                                          == (0xffU 
                                              & (IData)(vlTOPp->CPU__DOT__ir)))) {
-                                        __Vdly__CPU__DOT__pc 
-                                            = (0xfffU 
-                                               & ((IData)(2U) 
-                                                  + (IData)(vlTOPp->CPU__DOT__pc)));
+                                        vlTOPp->CPU__DOT__pc_jump_next_stb = 1U;
                                     }
                                 } else {
                                     vlTOPp->useless = 0U;
                                 }
                             } else {
                                 if ((0x1000U & (IData)(vlTOPp->CPU__DOT__ir))) {
-                                    __Vdly__CPU__DOT__pc 
+                                    vlTOPp->CPU__DOT__pc_preload 
                                         = (0xfffU & (IData)(vlTOPp->CPU__DOT__ir));
+                                    vlTOPp->CPU__DOT__pc_preload_stb = 1U;
                                 } else {
                                     vlTOPp->useless = 0U;
                                 }
                             }
                         }
                     }
-                    __Vdly__CPU__DOT__state = 0U;
+                    __Vdly__CPU__DOT__state = 3U;
+                } else {
+                    if ((3U == (IData)(vlTOPp->CPU__DOT__state))) {
+                        vlTOPp->CPU__DOT__pc_jump_next_stb = 0U;
+                        vlTOPp->CPU__DOT__pc_preload_stb = 0U;
+                        __Vdly__CPU__DOT__state = 0U;
+                    }
                 }
             }
         }
     }
     vlTOPp->CPU__DOT__state = __Vdly__CPU__DOT__state;
-    vlTOPp->CPU__DOT__pc = __Vdly__CPU__DOT__pc;
     if (__Vdlyvset__CPU__DOT__vx__v0) {
         vlTOPp->CPU__DOT__vx[__Vdlyvdim0__CPU__DOT__vx__v0] 
             = __Vdlyvval__CPU__DOT__vx__v0;
@@ -246,7 +259,7 @@ VL_INLINE_OPT void VCPU::_sequent__TOP__1(VCPU__Syms* __restrict vlSymsp) {
     vlTOPp->CPU__DOT__ir = __Vdly__CPU__DOT__ir;
     vlTOPp->CPU__DOT__mem_addr = (((0U == (IData)(vlTOPp->CPU__DOT__state)) 
                                    | (1U == (IData)(vlTOPp->CPU__DOT__state)))
-                                   ? (0xfffU & (IData)(vlTOPp->CPU__DOT__pc))
+                                   ? (0xfffU & (IData)(vlTOPp->CPU__DOT__pc_out))
                                    : 0U);
     vlTOPp->CPU__DOT__alu_vf_we = (3U < (0xfU & (IData)(vlTOPp->CPU__DOT__ir)));
     vlTOPp->CPU__DOT__alu_a = vlTOPp->CPU__DOT__vx[
@@ -423,7 +436,7 @@ void VCPU::_settle__TOP__3(VCPU__Syms* __restrict vlSymsp) {
         (0xfU & ((IData)(vlTOPp->CPU__DOT__ir) >> 4U))];
     vlTOPp->CPU__DOT__mem_addr = (((0U == (IData)(vlTOPp->CPU__DOT__state)) 
                                    | (1U == (IData)(vlTOPp->CPU__DOT__state)))
-                                   ? (0xfffU & (IData)(vlTOPp->CPU__DOT__pc))
+                                   ? (0xfffU & (IData)(vlTOPp->CPU__DOT__pc_out))
                                    : 0U);
     vlTOPp->CPU__DOT__alu_out = (0xffU & (((((((((0U 
                                                   == 
@@ -640,8 +653,11 @@ void VCPU::_ctor_var_reset() {
     CPU__DOT__alu_out = VL_RAND_RESET_I(8);
     CPU__DOT__alu_carry_or_borrow = VL_RAND_RESET_I(1);
     CPU__DOT__alu_vf_we = VL_RAND_RESET_I(1);
+    CPU__DOT__pc_preload = VL_RAND_RESET_I(12);
+    CPU__DOT__pc_preload_stb = VL_RAND_RESET_I(1);
+    CPU__DOT__pc_jump_next_stb = VL_RAND_RESET_I(1);
+    CPU__DOT__pc_out = VL_RAND_RESET_I(12);
     CPU__DOT__ir = VL_RAND_RESET_I(16);
-    CPU__DOT__pc = VL_RAND_RESET_I(12);
     { int __Vi0=0; for (; __Vi0<16; ++__Vi0) {
             CPU__DOT__vx[__Vi0] = VL_RAND_RESET_I(8);
     }}
