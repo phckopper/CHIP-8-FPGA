@@ -1,7 +1,11 @@
 module CPU(
     input wire clk,
     input wire rst,
-    output reg useless
+    output reg useless,
+
+    output wire gpu_hsync,
+    output wire gpu_vsync,
+    output wire [2:0] gpu_disp_rgb
 );
 
 wire [7:0] alu_a;
@@ -24,6 +28,17 @@ reg [11:0] pc_out;
 PC pc (
     .clk(clk), .rst(rst), .preload(pc_preload), .preload_stb(pc_preload_stb), .jump_next_stb(pc_jump_next_stb), .inc_stb(pc_inc_stb), .out(pc_out)
 );
+
+reg [5:0] gpu_x_addr;
+reg [4:0] gpu_y_addr;
+reg [7:0] gpu_sprite;
+reg gpu_we_stb;
+
+GPU gpu(
+    .clk(clk), .x_addr(gpu_x_addr), .y_addr(gpu_y_addr), .sprite(gpu_sprite), .we_stb(gpu_we_stb),
+    .hsync(gpu_hsync), .vsync(gpu_vsync), .disp_rgb(gpu_disp_rgb)
+);
+
 
 reg [15:0] ir;
 //reg [11:0]  i; // used for indirect addressing
