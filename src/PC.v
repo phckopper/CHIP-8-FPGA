@@ -11,7 +11,7 @@ module PC(
 
 always @(posedge clk) begin
     if(rst) begin
-        out <= 12'd0; // reset
+        out <= 12'h200; // reset
     end else begin
         if(preload_stb) begin
             out <= preload; // preloads PC, probably with the address from a jump instruction
